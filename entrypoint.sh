@@ -53,7 +53,7 @@ grant_access_to_video_devices() {
 
 launch_zoom_us() {
   cd /home/${ZOOM_US_USER}
-  exec sudo -HEu ${ZOOM_US_USER} PULSE_SERVER=/run/pulse/native QT_GRAPHICSSYSTEM="native" $@
+  exec sudo -HEu ${ZOOM_US_USER} QT_GRAPHICSSYSTEM="native" $@
 }
 
 case "$1" in
