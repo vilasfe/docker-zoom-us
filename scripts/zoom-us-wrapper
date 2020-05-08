@@ -20,8 +20,8 @@ fi;
 list_commands() {
   echo ""
   echo "Launch zoom-us using:"
-  echo "  zoom-us                     OR "
-  echo "  zoom-us-wrapper zoom-us"
+  echo "  zoom                        OR "
+  echo "  zoom-us-wrapper zoom"
   echo ""
   exit 1
 }
@@ -71,7 +71,10 @@ prepare_docker_volume_parameters() {
   touch ${XAUTH}
   xauth nlist :0 | sed -e 's/^..../ffff/' | xauth -f ${XAUTH} nmerge -
 
+  touch ${HOME}/.config/zoomus.conf # create if not exists
+
   VOLUMES+=" --volume=${HOME}/.config/zoomus.conf:/home/${ZOOM_US_USER}/.config/zoomus.conf"
+  VOLUMES+=" --volume=${HOME}/.cache/zoom:/home/${ZOOM_US_USER}/.cache/zoom"
   VOLUMES+=" --volume=${HOME}/.zoom:/home/${ZOOM_US_USER}/.zoom"
   VOLUMES+=" --volume=${XSOCK}:${XSOCK}"
   VOLUMES+=" --volume=${XAUTH}:${XAUTH}"
@@ -130,4 +133,5 @@ ${SUDO} docker run ${interactive} \
   --device /dev/dri \
   ${VOLUMES} \
   ${ZOOM_EXTRA_DOCKER_ARGUMENTS} \
+  --name zoomus \
   fvilas/zoom-us:latest ${prog} $@ ${to_dev_null}
